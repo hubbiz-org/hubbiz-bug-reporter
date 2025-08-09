@@ -187,7 +187,7 @@
       };
 
       const body = JSON.stringify({ title, description, screenshot: finalImage, environment: env });
-      console.log('body : ', body);
+      console.dir('body : ', body);
       modal.remove();
       /*
       fetch(apiEndpoint, {
