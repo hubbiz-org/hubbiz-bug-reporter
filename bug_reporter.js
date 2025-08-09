@@ -186,6 +186,9 @@
         pageUrl: window.location.href
       };
 
+      const body = JSON.stringify({ title, description, screenshot: finalImage, environment: env })
+      console.log('body : ", body)
+      /*
       fetch(apiEndpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -194,6 +197,7 @@
         alert("Bug report sent!");
         modal.remove();
       });
+      */
     };
   }
 
