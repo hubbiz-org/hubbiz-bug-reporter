@@ -1,5 +1,5 @@
 // bug-widget.js
-(async function () => {
+(async function () {
   // === LOAD TAILWIND CSS CDN ===
   function loadTailwind() {
     return new Promise((resolve) => {
