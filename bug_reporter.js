@@ -66,11 +66,6 @@
     let tempRect = null;
     let actions = [];
 
-    # TRY DEBUG CANVAS
-    const c = document.querySelector("canvas");
-    console.log("canvas width, height:", c.width, c.height);
-    console.log("css width, height:", c.clientWidth, c.clientHeight);
-
     img.onload = () => {
       canvas.width = img.width;
       canvas.height = img.height;
