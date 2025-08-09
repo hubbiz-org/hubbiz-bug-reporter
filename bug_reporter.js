@@ -15,8 +15,9 @@
       document.head.appendChild(link);
     });
   }
-
+  console.log('start loading tw css')
   await loadTailwind();
+  console.log('finished loading tw css')
   
   // === CONFIG FROM SCRIPT TAG ===
   const scriptTag = document.currentScript;
