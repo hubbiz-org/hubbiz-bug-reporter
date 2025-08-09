@@ -186,8 +186,8 @@
         pageUrl: window.location.href
       };
 
-      const body = JSON.stringify({ title, description, environment: env, screenshot: finalImage });
-      console.dir('body : ', body);
+      const body = { title, description, environment: env, screenshot: finalImage };
+      console.dir(body);
       modal.remove();
       /*
       fetch(apiEndpoint, {
