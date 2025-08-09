@@ -8,19 +8,24 @@
   const btnPosition = scriptTag.getAttribute("btnPosition") || "bottom-right";
   const apiEndpoint = scriptTag.getAttribute("apiEndpoint") || "https://httpbin.org/post";
 
+   // === LOAD TAILWIND CSS CDN ===
+  if (!document.getElementById("tailwind-cdn")) {
+    const link = document.createElement("link");
+    link.id = "tailwind-cdn";
+    link.rel = "stylesheet";
+    link.href = "https://cdn.jsdelivr.net/npm/tailwindcss@3.3.2/dist/tailwind.min.css";
+    document.head.appendChild(link);
+  }
+
   // === FLOATING BUTTON ===
   const btn = document.createElement("button");
-  btn.textContent = btnText;
-  btn.style.position = "fixed";
-  btn.style[btnPosition.includes("bottom") ? "bottom" : "top"] = "20px";
-  btn.style[btnPosition.includes("right") ? "right" : "left"] = "20px";
+  btn.className = "fixed px-4 py-2 rounded-md shadow-lg font-semibold focus:outline-none transition";
   btn.style.backgroundColor = btnColor;
   btn.style.color = btnTextColor;
-  btn.style.border = "none";
-  btn.style.padding = "10px 15px";
-  btn.style.borderRadius = "5px";
-  btn.style.cursor = "pointer";
   btn.style.zIndex = 99999;
+  btn.style[btnPosition.includes("bottom") ? "bottom" : "top"] = "1.25rem";
+  btn.style[btnPosition.includes("right") ? "right" : "left"] = "1.25rem";
+  btn.style.cursor = "pointer";
   document.body.appendChild(btn);
 
   // === SCRIPT LOADER ===
@@ -36,23 +41,16 @@
   // === CREATE MODAL WITH ANNOTATION ===
   function createModal(imageData) {
     const modal = document.createElement("div");
-    modal.style = `
-      position: fixed;
-      top:0; left:0; width:100%; height:100%;
-      background: rgba(0,0,0,0.6);
-      z-index: 100000;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-    `;
+    modal.className = "fixed inset-0 bg-black bg-opacity-60 flex flex-col items-center justify-center z-[100000] p-4";
 
     // Toolbar
     const toolbar = document.createElement("div");
-    toolbar.style = "margin-bottom: 10px; background: white; padding: 5px; border-radius: 5px;";
+    toolbar.className = "mb-3 bg-white rounded-md px-4 py-2 flex items-center space-x-2 shadow";
     toolbar.innerHTML = `
-      <button id="modePen">Pen</button>
-      <button id="modeRect">Rectangle</button>
-      <input type="color" id="colorPicker" value="#ff0000" />
-      <button id="undoBtn">Undo</button>
+      <button id="modePen" class="px-3 py-1 rounded border border-gray-300 hover:bg-indigo-600 hover:text-white transition">Pen</button>
+      <button id="modeRect" class="px-3 py-1 rounded border border-gray-300 hover:bg-indigo-600 hover:text-white transition">Rectangle</button>
+      <input type="color" id="colorPicker" value="#ef4444" class="w-10 h-8 cursor-pointer rounded border border-gray-300" />
+      <button id="undoBtn" class="px-3 py-1 rounded border border-gray-300 hover:bg-red-600 hover:text-white transition">Undo</button>
     `;
 
     // Canvas
@@ -72,7 +70,7 @@
       ctx.drawImage(img, 0, 0);
     };
     img.src = imageData;
-    canvas.style = "border: 2px solid #ccc; max-width:90%; max-height:70%; cursor: crosshair;";
+    canvas.className = "border-2 border-gray-300 rounded max-w-full max-h-[60vh] cursor-crosshair shadow-md";
 
     // Redraw actions
     function redraw() {
@@ -149,19 +147,32 @@
     });
 
     // Toolbar actions
-    toolbar.querySelector("#modePen").onclick = () => { mode = "pen"; canvas.style.cursor = "crosshair"; };
-    toolbar.querySelector("#modeRect").onclick = () => { mode = "rect"; canvas.style.cursor = "crosshair"; };
+    toolbar.querySelector("#modePen").onclick = () => {
+      mode = "pen";
+      canvas.style.cursor = "crosshair";
+      toolbar.querySelector("#modePen").classList.add("bg-indigo-600", "text-white");
+      toolbar.querySelector("#modeRect").classList.remove("bg-indigo-600", "text-white");
+    };
+    toolbar.querySelector("#modeRect").onclick = () => {
+      mode = "rect";
+      canvas.style.cursor = "crosshair";
+      toolbar.querySelector("#modeRect").classList.add("bg-indigo-600", "text-white");
+      toolbar.querySelector("#modePen").classList.remove("bg-indigo-600", "text-white");
+    };
     toolbar.querySelector("#colorPicker").oninput = e => { drawColor = e.target.value; };
     toolbar.querySelector("#undoBtn").onclick = () => { actions.pop(); redraw(); };
 
+    toolbar.querySelector("#modePen").classList.add("bg-indigo-600", "text-white");
+
     // Form
     const form = document.createElement("div");
+    form.className = "bg-white rounded-md p-4 w-full max-w-xl mt-4 shadow flex flex-col space-y-3";
     form.innerHTML = `
-      <input type="text" id="bugTitle" placeholder="Bug title" style="width:90%;margin:10px;padding:8px;"/>
-      <textarea id="bugDescription" placeholder="Describe the issue..." style="width:90%;height:80px;margin:10px;padding:8px;"></textarea>
-      <div style="margin-top:10px;">
-        <button id="sendBug" style="background:#28a745;color:#fff;padding:10px 15px;border:none;border-radius:5px;">Send</button>
-        <button id="cancelBug" style="margin-left:10px;padding:10px 15px;">Cancel</button>
+      <input type="text" id="bugTitle" placeholder="Bug title" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"/>
+      <textarea id="bugDescription" placeholder="Describe the issue..." rows="4" class="w-full px-3 py-2 border border-gray-300 rounded resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+      <div class="flex justify-end space-x-3">
+        <button id="cancelBug" class="px-4 py-2 border rounded border-gray-400 hover:bg-gray-100 transition">Cancel</button>
+        <button id="sendBug" class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition">Send</button>
       </div>
     `;
     form.style = "display:flex;flex-direction:column;align-items:center;";
