@@ -23,7 +23,7 @@
   console.log('finished loading tw css')
   
   // === CONFIG FROM SCRIPT TAG ===
-  const scriptTag = document.getElementById("hubbiz-bug-reporter-script);
+  const scriptTag = document.getElementById("hubbiz-bug-reporter-script");
   const btnColor = scriptTag.getAttribute("colorBtn") || "#ff5722";
   const btnTextColor = scriptTag.getAttribute("colorBtnText") || "#fff";
   const btnText = scriptTag.getAttribute("btnText") || "Report a Bug";
