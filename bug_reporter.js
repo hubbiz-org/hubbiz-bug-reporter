@@ -157,8 +157,8 @@
     // Form
     const form = document.createElement("div");
     form.innerHTML = `
-      <input type="text" placeholder="Bug title" style="width:90%;margin:10px;padding:8px;" />
-      <textarea placeholder="Describe the issue..." style="width:90%;height:80px;margin:10px;padding:8px;"></textarea>
+      <input type="text" id="bugTitle" placeholder="Bug title" style="width:90%;margin:10px;padding:8px;"/>
+      <textarea id="bugDescription" placeholder="Describe the issue..." style="width:90%;height:80px;margin:10px;padding:8px;"></textarea>
       <div style="margin-top:10px;">
         <button id="sendBug" style="background:#28a745;color:#fff;padding:10px 15px;border:none;border-radius:5px;">Send</button>
         <button id="cancelBug" style="margin-left:10px;padding:10px 15px;">Cancel</button>
@@ -174,8 +174,8 @@
     document.getElementById("cancelBug").onclick = () => modal.remove();
 
     document.getElementById("sendBug").onclick = () => {
-      const title = modal.querySelector("input").value;
-      const description = modal.querySelector("textarea").value;
+      const title = modal.querySelector("#bugTitle").value;
+      const description = modal.querySelector("#bugDescription").value;
       const finalImage = canvas.toDataURL("image/png");
 
       const env = {
