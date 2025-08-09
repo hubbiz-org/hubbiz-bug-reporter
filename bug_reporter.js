@@ -186,7 +186,7 @@
         pageUrl: window.location.href
       };
 
-      const body = JSON.stringify({ title, description, screenshot: finalImage, environment: env });
+      const body = JSON.stringify({ title, description, environment: env, screenshot: finalImage });
       console.dir('body : ', body);
       modal.remove();
       /*
