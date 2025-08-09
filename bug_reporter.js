@@ -100,48 +100,53 @@
 
     // Mouse events
     canvas.addEventListener("mousedown", e => {
-      const rect = canvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      drawing = true;
-      if (mode === "pen") {
-        actions.push({ type: "pen", color: drawColor, points: [{ x, y }] });
-      } else if (mode === "rect") {
-        startX = x;
-        startY = y;
-        tempRect = { start: { x, y }, end: { x, y }, color: drawColor };
-      }
-    });
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = canvas.width / rect.width;
+  const scaleY = canvas.height / rect.height;
+  const x = (e.clientX - rect.left) * scaleX;
+  const y = (e.clientY - rect.top) * scaleY;
 
-    canvas.addEventListener("mousemove", e => {
-      if (!drawing) return;
-      const rect = canvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+  drawing = true;
+  if (mode === "pen") {
+    actions.push({ type: "pen", color: drawColor, points: [{ x, y }] });
+  } else if (mode === "rect") {
+    startX = x;
+    startY = y;
+    tempRect = { start: { x, y }, end: { x, y }, color: drawColor };
+  }
+});
 
-      if (mode === "pen") {
-        const action = actions[actions.length - 1];
-        action.points.push({ x, y });
-        redraw();
-      } else if (mode === "rect") {
-        tempRect.end = { x, y };
-        redraw();
-        ctx.strokeStyle = drawColor;
-        ctx.strokeRect(
-          tempRect.start.x, tempRect.start.y,
-          tempRect.end.x - tempRect.start.x,
-          tempRect.end.y - tempRect.start.y
-        );
-      }
-    });
+canvas.addEventListener("mousemove", e => {
+  if (!drawing) return;
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = canvas.width / rect.width;
+  const scaleY = canvas.height / rect.height;
+  const x = (e.clientX - rect.left) * scaleX;
+  const y = (e.clientY - rect.top) * scaleY;
 
-    canvas.addEventListener("mouseup", () => {
-      if (drawing && mode === "rect" && tempRect) {
-        actions.push({ type: "rect", color: drawColor, start: tempRect.start, end: tempRect.end });
-        tempRect = null;
-      }
-      drawing = false;
-    });
+  if (mode === "pen") {
+    const action = actions[actions.length - 1];
+    action.points.push({ x, y });
+    redraw();
+  } else if (mode === "rect") {
+    tempRect.end = { x, y };
+    redraw();
+    ctx.strokeStyle = drawColor;
+    ctx.strokeRect(
+      tempRect.start.x, tempRect.start.y,
+      tempRect.end.x - tempRect.start.x,
+      tempRect.end.y - tempRect.start.y
+    );
+  }
+});
+
+canvas.addEventListener("mouseup", () => {
+  if (drawing && mode === "rect" && tempRect) {
+    actions.push({ type: "rect", color: drawColor, start: tempRect.start, end: tempRect.end });
+    tempRect = null;
+  }
+  drawing = false;
+});
 
     // Toolbar actions
     toolbar.querySelector("#modePen").onclick = () => { mode = "pen"; canvas.style.cursor = "crosshair"; };
