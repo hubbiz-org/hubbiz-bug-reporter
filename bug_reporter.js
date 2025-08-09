@@ -38,6 +38,7 @@
   btn.style.backgroundColor = btnColor;
   btn.style.color = btnTextColor;
   btn.style.zIndex = 99999;
+  btn.textContent = btnText;
   btn.style[btnPosition.includes("bottom") ? "bottom" : "top"] = "1.25rem";
   btn.style[btnPosition.includes("right") ? "right" : "left"] = "1.25rem";
   btn.style.cursor = "pointer";
@@ -177,7 +178,7 @@
     toolbar.querySelector("#colorPicker").oninput = e => { drawColor = e.target.value; };
     toolbar.querySelector("#undoBtn").onclick = () => { actions.pop(); redraw(); };
 
-    toolbar.querySelector("#modePen").classList.add("bg-indigo-600", "text-white");
+    //toolbar.querySelector("#modePen").classList.add("bg-indigo-600", "text-white");
 
     // Form
     const form = document.createElement("div");
