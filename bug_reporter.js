@@ -1,5 +1,23 @@
 // bug-widget.js
-(function () {
+(async () => {
+  // === LOAD TAILWIND CSS CDN ===
+  function loadTailwind() {
+    return new Promise((resolve) => {
+      if (document.getElementById("tailwind-cdn")) {
+        resolve();
+        return;
+      }
+      const link = document.createElement("link");
+      link.id = "tailwind-cdn";
+      link.rel = "stylesheet";
+      link.href = "https://cdn.jsdelivr.net/npm/tailwindcss@3.3.2/dist/tailwind.min.css";
+      link.onload = () => resolve();
+      document.head.appendChild(link);
+    });
+  }
+
+  await loadTailwind();
+  
   // === CONFIG FROM SCRIPT TAG ===
   const scriptTag = document.currentScript;
   const btnColor = scriptTag.getAttribute("colorBtn") || "#ff5722";
@@ -8,14 +26,7 @@
   const btnPosition = scriptTag.getAttribute("btnPosition") || "bottom-right";
   const apiEndpoint = scriptTag.getAttribute("apiEndpoint") || "https://httpbin.org/post";
 
-   // === LOAD TAILWIND CSS CDN ===
-  if (!document.getElementById("tailwind-cdn")) {
-    const link = document.createElement("link");
-    link.id = "tailwind-cdn";
-    link.rel = "stylesheet";
-    link.href = "https://cdn.jsdelivr.net/npm/tailwindcss@3.3.2/dist/tailwind.min.css";
-    document.head.appendChild(link);
-  }
+   
 
   // === FLOATING BUTTON ===
   const btn = document.createElement("button");
