@@ -186,8 +186,9 @@
         pageUrl: window.location.href
       };
 
-      const body = JSON.stringify({ title, description, screenshot: finalImage, environment: env })
-      console.log('body : ", body)
+      const body = JSON.stringify({ title, description, screenshot: finalImage, environment: env });
+      console.log('body : ', body);
+      modal.remove();
       /*
       fetch(apiEndpoint, {
         method: "POST",
