@@ -7,12 +7,15 @@
         resolve();
         return;
       }
-      const link = document.createElement("link");
-      link.id = "tailwind-cdn";
-      link.rel = "stylesheet";
-      link.href = "https://cdn.jsdelivr.net/npm/tailwindcss@3.3.2/dist/tailwind.min.css";
-      link.onload = () => resolve();
-      document.head.appendChild(link);
+      const tailwindScript = document.createElement("script");
+      tailwindScript.id = "tailwind-cdn";
+      tailwindScript.src = "https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4";
+      tailwindScript.onload = () => resolve();
+      tailwindScript.onerror = () => {
+        console.warn("Failed to load Tailwind runtime");
+        resolve();
+      }
+      document.head.appendChild(tailwindScript);
     });
   }
   console.log('start loading tw css')
