@@ -79,6 +79,13 @@ onMounted(async () => {
 
   // Use html2canvas to take screenshot of current page
   const screenshotCanvas = await html2canvas(document.body, {
+    width: window.innerWidth,
+    height: window.innerHeight,
+    windowWidth: window.innerWidth,
+    windowHeight: window.innerHeight,
+    scrollX: window.scrollX,
+    scrollY: window.scrollY,
+    scale: window.devicePixelRatio,
     ignoreElements: (element) => {
       return element.classList?.contains('no-screenshot')
     }

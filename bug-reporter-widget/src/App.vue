@@ -276,6 +276,9 @@ function submitBugReport() {
     screenshot: screenshot.value
   }
   console.dir(body)
+  if (screenshot.value) {
+    console.log('%c ', `font-size:1px; padding:60px 120px; background:url(${screenshot.value}) no-repeat; background-size:contain;`);
+  }
   showModal.value = false
   modalPos.value = { right: 24, bottom: 24 }
 }
@@ -293,6 +296,8 @@ function submitBugReport() {
   width: 100vw;
   height: 100vh;
   pointer-events: auto;
+  position: fixed;
+  inset: 0;
 }
 .custom-modal {
   position: fixed;
