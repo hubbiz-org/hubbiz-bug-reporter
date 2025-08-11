@@ -4,10 +4,11 @@
     <v-btn
       v-if="!showModal"
       id="bug-report-btn"
-      class="no-screenshot"
+      class="no-screenshot btn-elevated"
       min-height="auto"
       height="auto"
       variant="tonal"
+      min-width="0"
       :color="props.btnColor"
       :style="{
         position: 'fixed',
@@ -339,5 +340,8 @@ function submitBugReport() {
 .drag-handle {
   cursor: move;
   user-select: none;
+}
+.btn-elevated {
+  box-shadow: 4px 0 16px rgba(0,0,0,0.30)
 }
 </style>
