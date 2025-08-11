@@ -10,12 +10,14 @@ import {
   VColorPicker,
   VDivider,
   VIcon,
-  // VMenu,
+  VListItem,
+  VMenu,
   VSelect,
   VSpacer,
   VTextarea,
   VTextField,
   VToolbar,
+  VToolbarTitle,
 } from 'vuetify/components'
 
 export const vuetify = createVuetify({
@@ -31,12 +33,14 @@ export const vuetify = createVuetify({
     VColorPicker,
     VDivider,
     VIcon,
-    // VMenu,
+    VListItem,
+    VMenu,
     VSelect,
     VSpacer,
     VTextField,
     VTextarea,
     VToolbar,
+    VToolbarTitle,
   },
   icons: {
     defaultSet: 'mdi',

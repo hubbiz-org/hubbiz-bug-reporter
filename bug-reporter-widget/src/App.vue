@@ -52,23 +52,25 @@
     }"
   >
     <v-card elevation="14">
-      <div class="card-title-row" style="display: flex; align-items: center; padding: 8px 16px;">
-        <v-icon
-          class="drag-handle"
-          style="cursor: move;"
-          @mousedown.stop.prevent="startDrag"
-        >
-          mdi-cursor-move
-        </v-icon>
-        <span style="font-weight: 500;">Report Bug</span>
-      </div>
+      <v-toolbar :color="props.btnColor">
+        <template v-slot:prepend>
+          <v-icon
+            class="drag-handle ml-2"
+            style="cursor: move;"
+            @mousedown.stop.prevent="startDrag"
+          >
+            mdi-cursor-move
+          </v-icon>
+        </template>
+        <v-toolbar-title style="font-weight: 500;">Report Bug</v-toolbar-title>
+      </v-toolbar>
       <v-toolbar
-        dense
+        density="compact"
         flat
         color="grey-lighten-4"
       >
         <!-- Tool toggle -->
-        <v-btn-toggle v-model="tool" tile dense mandatory>
+        <v-btn-toggle v-model="tool" tile mandatory>
           <v-btn value="pen" tile icon>
             <v-icon>mdi-pencil</v-icon>
           </v-btn>
@@ -77,48 +79,44 @@
           </v-btn>
         </v-btn-toggle>
         <v-divider vertical></v-divider>
-        <!-- <v-menu :attach="true" :close-on-content-click="false">
-          <template #activator="{ props }">
-            <v-btn v-bind="props" icon>
-              <v-icon>mdi-line-scan</v-icon>
-            </v-btn>
-          </template> -->
-            <v-select
-              v-model="thickness"
-              item-title="label"
-              item-value="value"
-              hide-details
-              flat
-              tile
-              :items="thicknessOptions"
-              :menu-props="{ attach: 'body', zIndex: 20000 }"
-            >
-              <template #item="{ item, props }">
-                <div v-bind="props" style="display: flex; align-items: center;">
-                  <span style="width: 48px; height: 24px; display: flex; align-items: center;">
-                    <svg width="48" height="24">
-                      <line x1="4" y1="12" x2="44" y2="12" :stroke-width="item.value" stroke="black" stroke-linecap="round"/>
-                    </svg>
-                  </span>
-                  <span style="margin-left: 8px;">{{ item.label }}</span>
-                </div>
-              </template>
-              <template #selection="{ item }">
-                <div style="display: flex; align-items: center;">
-                  <span style="width: 48px; height: 24px; display: flex; align-items: center;">
-                    <svg width="48" height="24">
-                      <line x1="4" y1="12" x2="44" y2="12" :stroke-width="item.value" stroke="black" stroke-linecap="round"/>
-                    </svg>
-                  </span>
-                  <span style="margin-left: 8px;">{{ item.label }}</span>
-                </div>
-              </template>
-            </v-select>
-        <!-- </v-menu> -->
+        <v-select
+          v-model="thickness"
+          item-title="label"
+          item-value="value"
+          density="comfortable"
+          variant="solo"
+          hide-details
+          flat
+          tile
+          :items="thicknessOptions"
+          :menu-props="{ attach: 'body', zIndex: 20000 }"
+        >
+          <template #item="{ item, props }">
+            <v-list-item v-bind="props" title="">
+              <div style="display: flex; align-items: center;" class="px-2">
+                <span style="width: 48px; height: 24px; display: flex; align-items: center;">
+                  <svg width="48" height="24">
+                    <line x1="4" y1="12" x2="44" y2="12" :stroke-width="item.value" stroke="black" stroke-linecap="round"/>
+                  </svg>
+                </span>
+                <span style="margin-left: 8px;">{{ item.raw.label }}</span>
+              </div>
+            </v-list-item>
+          </template>
+          <template #selection="{ item }">
+            <div style="display: flex; align-items: center;">
+              <span style="width: 48px; height: 24px; display: flex; align-items: center;">
+                <svg width="48" height="24">
+                  <line x1="4" y1="12" x2="44" y2="12" :stroke-width="item.value" stroke="black" stroke-linecap="round"/>
+                </svg>
+              </span>
+            </div>
+          </template>
+        </v-select>
         <!-- Color picker menu -->
         <v-menu :attach="true">
           <template #activator="{ props }">
-            <v-btn v-bind="props" tile icon>
+            <v-btn v-bind="props" tile icon variant="tonal" :color="selectedColor">
               <v-icon>mdi-palette</v-icon>
             </v-btn>
           </template>
@@ -128,15 +126,15 @@
               show-swatches
               :swatches="[
                 // Blue
-                ['#E3F2FD', '#90CAF9', '#42A5F5', '#1976D2', '#0D47A1'],
+                ['#BBDEFB', '#64B5F6', '#1E88E5', '#1565C0', '#0D47A1'],
                 // Red
-                ['#FFEBEE', '#EF9A9A', '#E57373', '#E53935', '#B71C1C'],
+                ['#FFCDD2', '#E57373', '#E53935', '#C62828', '#B71C1C'],
                 // Green
-                ['#E8F5E9', '#A5D6A7', '#66BB6A', '#43A047', '#1B5E20'],
+                ['#C8E6C9', '#81C784', '#43A047', '#2E7D32', '#1B5E20'],
                 // Purple
-                ['#F3E5F5', '#CE93D8', '#AB47BC', '#8E24AA', '#4A148C'],
+                ['#D1C4E9', '#9575CD', '#5E35B1', '#4527A0', '#311B92'],
                 // Orange
-                ['#FFF3E0', '#FFB74D', '#FF9800', '#FFB300', '#F57C00'],
+                ['#FFE0B2', '#FFB74D', '#FB8C00', '#EF6C00', '#E65100'],
               ]"
               hide-inputs
               hide-canvas
@@ -146,24 +144,31 @@
           </v-card>
         </v-menu>
         <v-divider vertical></v-divider>
-        <v-btn tile icon @click="undo" :disabled="!screenshot">
+        <v-btn tile icon class="mr-0" :disabled="!screenshot" @click="undo" >
           <v-icon>mdi-undo</v-icon>
         </v-btn>
       </v-toolbar>
+      <v-divider/>
       <v-card-text>
         <v-text-field
           v-model="bugTitle"
-          label="Bug title"
+          label="Title"
           variant="outlined"
           density="compact"
+          class="mt-2"
         />
         <v-textarea
           v-model="bugDescription"
           label="Description"
           variant="outlined"
           density="compact"
-          class="mt-2"
+          class="mt-1"
           rows="3"
+          auto-grow
+          max-rows="6"
+          counter
+          persistent-counter
+          no-resize
         />
       </v-card-text>
       <v-divider/>
@@ -171,9 +176,11 @@
         <v-btn style="flex: 1;" variant="tonal" color="error" @click="closeModal">Cancel</v-btn>
         <v-btn style="flex: 1;" variant="flat" color="success" @click="submitBugReport">Submit</v-btn>
       </v-card-actions>
-      <v-divider/>
-      <div class="text-center my-1" style="font-size: 12px; color: #888;">
-        Powered by <a href="https://www.hubbiz.be" target="_blank" style="color: #888; text-decoration: underline;">Hubbiz</a>
+      <div class="text-center mt-1 py-1" style="font-size: 12px; background-color: #363636; color: #e6e6e6">
+        Powered by
+        <a href="https://www.hubbiz.be" target="_blank" style="display: inline-block; vertical-align: middle;">
+          <img :src="hubbizLogo" alt="Hubbiz" style="height: 12px; margin-left: 6px;" />
+        </a>
       </div>
     </v-card>
   </div>
@@ -181,6 +188,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount } from 'vue'
+import hubbizLogo from '@/assets/hubbiz-logo-light.png'
 import ScreenshotAnnotator from '@/components/ScreenshotAnnotator.vue'
 
 interface Props {
