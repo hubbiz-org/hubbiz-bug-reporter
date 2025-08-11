@@ -208,9 +208,9 @@ const annotatorRef = ref<InstanceType<typeof ScreenshotAnnotator> | null>(null)
 
 const thicknessOptions = [
   { value: 2, label: 'Thin' },
-  { value: 4, label: 'Medium' },
-  { value: 6, label: 'Thick' },
-  { value: 8, label: 'Extra Thick' },
+  { value: 4, label: 'Normal' },
+  { value: 6, label: 'Medium' },
+  { value: 8, label: 'Thick' },
 ]
 
 // --- Draggable modal state ---
